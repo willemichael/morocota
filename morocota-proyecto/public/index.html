@@ -2556,7 +2556,7 @@
                 const data = await response.json();
                 
                 if (data.error) {
-                    throw new Error(data.message || 'Error obteniendo datos');
+                    throw new Error(data.details || data.error || 'Error obteniendo datos');
                 }
                 
                 // Actualizar rates - null si no está disponible
@@ -2642,7 +2642,6 @@
                     statusText.textContent = 'Error';
                 }
             }
-        }
         }
 
         // Converter functions
