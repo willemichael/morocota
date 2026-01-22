@@ -1,0 +1,2848 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Morocota — El valor de la verdad</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 80px;
+        }
+
+        :root {
+            /* Colores Primarios - Morocota */
+            --oro: #C5A059;
+            --oro-light: #D4B574;
+            --oro-dark: #A8874A;
+            
+            /* Fondos */
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F7F7F7;
+            --bg-dark: #1A1A1A;
+            --bg-card: #FFFFFF;
+            
+            /* Textos */
+            --text-primary: #1A1A1A;
+            --text-secondary: #6B7280;
+            --text-muted: #9CA3AF;
+            --text-inverse: #FFFFFF;
+            
+            /* Funcionales */
+            --success: #00C805;
+            --success-bg: #E6FAE6;
+            --danger: #EF4444;
+            --danger-bg: #FEE2E2;
+            
+            /* UI */
+            --border: #E5E7EB;
+            --border-light: #F3F4F6;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+            --shadow-md: 0 4px 20px rgba(0,0,0,0.06);
+            --shadow-lg: 0 12px 40px rgba(0,0,0,0.08);
+            --shadow-card: 0 2px 16px rgba(0,0,0,0.04);
+            
+            /* Radii */
+            --radius-sm: 8px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            --radius-xl: 32px;
+            --radius-pill: 9999px;
+        }
+
+        body {
+            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            font-size: 16px;
+        }
+
+        /* ==================== LAYOUT ==================== */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* ==================== HEADER ==================== */
+        header {
+            position: sticky;
+            top: 0;
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-light);
+            z-index: 100;
+        }
+
+        .header-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--oro);
+            border-radius: var(--radius-pill);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-initials {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .logo-content {
+            display: flex;
+            flex-direction: column;
+            gap: 0px;
+        }
+
+        .logo-text {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        .logo-slogan {
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            letter-spacing: 0.02em;
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-link {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 10px 16px;
+            border-radius: var(--radius-pill);
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--text-primary);
+            background: var(--bg-secondary);
+        }
+
+        .status-pill {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: var(--success-bg);
+            border-radius: var(--radius-pill);
+            margin-left: 8px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(0.9); }
+        }
+
+        .status-text {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--success);
+        }
+
+        /* ==================== HERO ==================== */
+        .hero {
+            padding: 80px 0 60px;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        .hero-content h1 span {
+            color: var(--oro);
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+            line-height: 1.6;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 14px 28px;
+            border-radius: var(--radius-pill);
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--text-primary);
+            color: var(--text-inverse);
+        }
+
+        .btn-primary:hover {
+            background: #333;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-secondary {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border);
+        }
+
+        .btn-gold {
+            background: var(--oro);
+            color: white;
+        }
+
+        .btn-gold:hover {
+            background: var(--oro-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Hero Converter Card */
+        .hero-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-xl);
+            padding: 32px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-light);
+        }
+
+        .converter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .converter-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .rate-selector-mini {
+            position: relative;
+        }
+
+        .rate-select {
+            appearance: none;
+            background: var(--bg-secondary);
+            border: none;
+            padding: 8px 32px 8px 14px;
+            border-radius: var(--radius-pill);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .rate-select:hover {
+            background: var(--border);
+        }
+
+        .rate-select:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(197, 160, 89, 0.2);
+        }
+
+        .select-arrow {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            color: var(--text-secondary);
+        }
+
+        .converter-inputs {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 16px;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .input-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .input-field {
+            width: 100%;
+            background: var(--bg-secondary);
+            border: 2px solid transparent;
+            border-radius: var(--radius-md);
+            padding: 16px;
+            font-family: 'DM Mono', monospace;
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--oro);
+            background: white;
+        }
+
+        .input-field::placeholder {
+            color: var(--text-muted);
+        }
+
+        .swap-btn {
+            width: 44px;
+            height: 44px;
+            background: var(--bg-secondary);
+            border: none;
+            border-radius: var(--radius-pill);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--text-secondary);
+        }
+
+        .swap-btn:hover {
+            background: var(--border);
+            color: var(--text-primary);
+        }
+
+        .converter-rate {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            padding: 12px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-pill);
+        }
+
+        .rate-badge {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        /* ==================== RATES SECTION ==================== */
+        .rates-section {
+            padding: 80px 0;
+            background: var(--bg-secondary);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .section-tag {
+            display: inline-block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--oro);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 12px;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+        }
+
+        .rates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .rate-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow-card);
+            border: 1px solid var(--border-light);
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .rate-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .rate-card.featured {
+            border-color: var(--oro);
+            background: linear-gradient(135deg, rgba(197, 160, 89, 0.05) 0%, white 100%);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .card-info h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+        }
+
+        .card-info span {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .card-source-link {
+            font-size: 0.8rem;
+            color: var(--oro);
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .card-source-link:hover {
+            color: var(--oro-dark);
+            text-decoration: underline;
+        }
+
+        .card-source-text {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .card-badge {
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: var(--radius-pill);
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+        }
+
+        .card-badge.official {
+            background: var(--success-bg);
+            color: var(--success);
+        }
+
+        .card-value {
+            font-family: 'DM Mono', monospace;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .card-unit {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-top: 4px;
+        }
+
+        .card-variation {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 2px;
+        }
+
+        .card-variation-value {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .card-variation.up .card-variation-value {
+            color: var(--success);
+        }
+
+        .card-variation.down .card-variation-value {
+            color: var(--danger);
+        }
+
+        .card-variation.neutral .card-variation-value {
+            color: var(--text-muted);
+        }
+
+        .card-variation-label {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .card-variation svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        /* Tooltip con gráfico histórico */
+        .rate-card {
+            position: relative;
+        }
+
+        .chart-tooltip {
+            position: absolute;
+            bottom: calc(100% + 12px);
+            left: 50%;
+            transform: translateX(-50%) scale(0.95);
+            background: var(--bg-dark);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            width: 280px;
+            box-shadow: var(--shadow-lg);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s ease;
+            z-index: 50;
+        }
+
+        .chart-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 8px solid transparent;
+            border-top-color: var(--bg-dark);
+        }
+
+        .rate-card:hover .chart-tooltip {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) scale(1);
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .chart-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .chart-period {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .chart-container {
+            height: 80px;
+            position: relative;
+        }
+
+        .chart-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .chart-line {
+            fill: none;
+            stroke: var(--oro);
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .chart-area {
+            fill: url(#chartGradient);
+        }
+
+        .chart-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .chart-stat {
+            text-align: center;
+        }
+
+        .chart-stat-label {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .chart-stat-value {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: white;
+            margin-top: 2px;
+        }
+
+        .chart-stat-value.up {
+            color: var(--success);
+        }
+
+        .chart-stat-value.down {
+            color: var(--danger);
+        }
+
+        .update-bar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .update-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .update-item strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .refresh-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: var(--text-primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius-pill);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .refresh-btn:hover {
+            background: #333;
+            transform: translateY(-2px);
+        }
+
+        .refresh-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* ==================== DIFFERENTIAL ==================== */
+        .differential-section {
+            padding: 60px 0;
+        }
+
+        .diff-card {
+            background: var(--bg-dark);
+            border-radius: var(--radius-xl);
+            padding: 40px;
+            color: white;
+        }
+
+        .diff-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .diff-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .diff-selectors {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .diff-select-wrapper {
+            position: relative;
+        }
+
+        .diff-select {
+            appearance: none;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 8px 36px 8px 14px;
+            border-radius: var(--radius-pill);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .diff-select:hover {
+            background: rgba(255,255,255,0.15);
+        }
+
+        .diff-select:focus {
+            outline: none;
+            border-color: var(--oro);
+        }
+
+        .diff-select option {
+            background: var(--bg-dark);
+            color: white;
+        }
+
+        .diff-select-arrow {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            color: rgba(255,255,255,0.6);
+        }
+
+        .diff-vs {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.5);
+        }
+
+        .diff-content {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 32px;
+            align-items: center;
+            text-align: center;
+        }
+
+        .diff-item-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: rgba(255,255,255,0.5);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 8px;
+        }
+
+        .diff-item-value {
+            font-family: 'DM Mono', monospace;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .diff-item-source {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.4);
+            margin-top: 4px;
+        }
+
+        .diff-center-value {
+            font-family: 'DM Mono', monospace;
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--oro);
+        }
+
+        .diff-alert {
+            margin-top: 24px;
+            padding: 16px 20px;
+            background: rgba(255, 80, 0, 0.15);
+            border-radius: var(--radius-md);
+            display: none;
+        }
+
+        .diff-alert.show {
+            display: block;
+        }
+
+        .diff-alert p {
+            font-size: 0.9rem;
+            color: #FF8C5A;
+        }
+
+        /* ==================== PAYMENT SECTION ==================== */
+        .payment-section {
+            padding: 80px 0;
+            background: var(--bg-secondary);
+        }
+
+        .payment-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-xl);
+            padding: 40px;
+            box-shadow: var(--shadow-md);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .payment-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .payment-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .payment-subtitle {
+            font-size: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .toggle-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .toggle-btn {
+            padding: 16px 20px;
+            background: var(--bg-secondary);
+            border: 2px solid transparent;
+            border-radius: var(--radius-md);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .toggle-btn:hover {
+            border-color: var(--border);
+        }
+
+        .toggle-btn.active {
+            background: var(--text-primary);
+            color: white;
+            border-color: var(--text-primary);
+        }
+
+        .payment-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .payment-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .payment-input-group label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .payment-input {
+            background: var(--bg-secondary);
+            border: 2px solid transparent;
+            border-radius: var(--radius-md);
+            padding: 14px 16px;
+            font-family: 'DM Mono', monospace;
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        .payment-input:focus {
+            outline: none;
+            border-color: var(--oro);
+            background: white;
+        }
+
+        .rate-dropdown-group {
+            margin-bottom: 24px;
+        }
+
+        .rate-dropdown-group label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .rate-dropdown-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .rate-dropdown-full {
+            width: 100%;
+            appearance: none;
+            background: var(--oro);
+            border: none;
+            padding: 16px 48px 16px 20px;
+            border-radius: var(--radius-md);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .rate-dropdown-full:hover {
+            background: var(--oro-dark);
+        }
+
+        .rate-dropdown-full:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(197, 160, 89, 0.3);
+        }
+
+        .rate-dropdown-full option {
+            background: white;
+            color: var(--text-primary);
+            text-align: left;
+        }
+
+        .rate-dropdown-arrow {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            color: white;
+        }
+
+        .comparison-box {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .comparison-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+        }
+
+        .comparison-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            background: white;
+            border-radius: var(--radius-md);
+            margin-bottom: 8px;
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .comparison-option:last-child {
+            margin-bottom: 0;
+        }
+
+        .comparison-option.best {
+            border-color: var(--success);
+            background: var(--success-bg);
+        }
+
+        .option-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .option-label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .option-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--success);
+            background: white;
+            padding: 4px 8px;
+            border-radius: var(--radius-pill);
+            width: fit-content;
+        }
+
+        .option-amount {
+            font-family: 'DM Mono', monospace;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .recommendation-box {
+            background: linear-gradient(135deg, rgba(197, 160, 89, 0.1) 0%, rgba(197, 160, 89, 0.05) 100%);
+            border: 1px solid var(--oro);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .recommendation-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--oro-dark);
+            margin-bottom: 8px;
+        }
+
+        .recommendation-text {
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .recommendation-text strong {
+            font-weight: 700;
+        }
+
+        .recommendation-savings {
+            font-family: 'DM Mono', monospace;
+            font-weight: 700;
+            color: var(--success);
+        }
+
+        .equilibrium-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .equilibrium-item {
+            background: var(--bg-dark);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            text-align: center;
+        }
+
+        .equilibrium-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: rgba(255,255,255,0.5);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 4px;
+        }
+
+        .equilibrium-value {
+            font-family: 'DM Mono', monospace;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--oro);
+        }
+
+        /* ==================== INFO SECTION ==================== */
+        .info-section {
+            padding: 80px 0;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .info-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+            transition: all 0.2s ease;
+        }
+
+        .info-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .info-card h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+        }
+
+        .info-card p {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* ==================== FOOTER ==================== */
+        
+        /* About Section - Storytelling */
+        .about-section {
+            padding: 80px 0;
+            background: var(--bg-dark);
+            color: white;
+        }
+
+        .about-container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .about-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--oro);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 32px;
+            font-size: 2.5rem;
+        }
+
+        .about-tag {
+            display: inline-block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--oro);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 16px;
+        }
+
+        .about-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 32px;
+            line-height: 1.2;
+        }
+
+        .about-content {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .about-text {
+            font-size: 1.15rem;
+            line-height: 1.8;
+            color: rgba(255,255,255,0.8);
+        }
+
+        .about-text.highlight {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--oro);
+            font-style: italic;
+        }
+
+        .about-text.conclusion {
+            font-size: 1.1rem;
+            color: rgba(255,255,255,0.9);
+        }
+
+        .about-facts {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 48px;
+            padding-top: 48px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .about-fact {
+            text-align: center;
+        }
+
+        .about-fact-icon {
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+        }
+
+        .about-fact-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--oro);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .about-fact-text {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.7);
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        footer {
+            padding: 40px 0;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-logo {
+            width: 32px;
+            height: 32px;
+            background: var(--oro);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .footer-brand-text {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .footer-text {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-align: right;
+        }
+
+        .footer-tagline {
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+
+        .footer-disclaimer {
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .footer-disclaimer p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+            text-align: center;
+        }
+
+        .footer-disclaimer strong {
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 768px) {
+            .about-title {
+                font-size: 1.5rem;
+            }
+
+            .about-text {
+                font-size: 1rem;
+            }
+
+            .about-text.highlight {
+                font-size: 1.1rem;
+            }
+
+            .about-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 1.8rem;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+
+            .footer-text {
+                text-align: center;
+            }
+        }
+
+        /* ==================== RESPONSIVE ==================== */
+        
+        /* Tablets */
+        @media (max-width: 968px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .hero-content {
+                text-align: center;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-cta {
+                justify-content: center;
+            }
+
+            .hero-card {
+                max-width: 500px;
+                margin: 0 auto;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            /* Container */
+            .container {
+                padding: 0 16px;
+            }
+
+            /* Header */
+            .header-inner {
+                flex-wrap: wrap;
+                gap: 12px;
+                padding: 12px 0;
+            }
+
+            .logo-text {
+                font-size: 1.1rem;
+            }
+
+            .logo-slogan {
+                font-size: 0.6rem;
+            }
+
+            .nav {
+                order: 3;
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 4px;
+            }
+
+            .nav-link {
+                padding: 8px 10px;
+                font-size: 0.75rem;
+            }
+
+            /* Hero */
+            .hero {
+                padding: 40px 0 30px;
+            }
+
+            .hero-content h1 {
+                font-size: 1.75rem;
+                line-height: 1.2;
+            }
+
+            .hero-subtitle {
+                font-size: 1rem;
+                margin-bottom: 24px;
+            }
+
+            .hero-cta {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .btn {
+                width: 100%;
+                padding: 14px 20px;
+            }
+
+            .hero-card {
+                padding: 20px;
+                border-radius: var(--radius-lg);
+            }
+
+            .converter-header {
+                flex-direction: column;
+                gap: 12px;
+                align-items: flex-start;
+            }
+
+            .converter-inputs {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .swap-btn {
+                transform: rotate(90deg);
+                align-self: center;
+            }
+
+            .input-field {
+                font-size: 1.25rem;
+                padding: 14px;
+            }
+
+            /* Rates Section */
+            .rates-section {
+                padding: 50px 0;
+            }
+
+            .section-header {
+                margin-bottom: 32px;
+            }
+
+            .section-title {
+                font-size: 1.75rem;
+            }
+
+            .section-subtitle {
+                font-size: 0.95rem;
+            }
+
+            .rates-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .rate-card {
+                padding: 20px;
+            }
+
+            .card-value {
+                font-size: 1.75rem;
+            }
+
+            /* Ocultar tooltips en móvil (difíciles de usar con touch) */
+            .chart-tooltip {
+                display: none;
+            }
+
+            .update-bar {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            /* Differential */
+            .differential-section {
+                padding: 40px 0;
+            }
+
+            .diff-card {
+                padding: 24px;
+                border-radius: var(--radius-lg);
+            }
+
+            .diff-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 16px;
+            }
+
+            .diff-selectors {
+                flex-direction: column;
+                width: 100%;
+                gap: 8px;
+            }
+
+            .diff-select-wrapper {
+                width: 100%;
+            }
+
+            .diff-select {
+                width: 100%;
+                text-align: center;
+            }
+
+            .diff-vs {
+                display: none;
+            }
+
+            .diff-content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .diff-center-value {
+                font-size: 2.5rem;
+                order: -1;
+            }
+
+            .diff-item-value {
+                font-size: 1.5rem;
+            }
+
+            /* Payment Section */
+            .payment-section {
+                padding: 50px 0;
+            }
+
+            .payment-card {
+                padding: 24px;
+                border-radius: var(--radius-lg);
+            }
+
+            .payment-title {
+                font-size: 1.4rem;
+            }
+
+            .payment-inputs {
+                grid-template-columns: 1fr;
+            }
+
+            .toggle-group {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
+            .toggle-btn {
+                padding: 14px 16px;
+            }
+
+            .comparison-option {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .option-amount {
+                align-self: flex-end;
+            }
+
+            .equilibrium-grid {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
+            /* Info Section */
+            .info-section {
+                padding: 50px 0;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .info-card {
+                padding: 20px;
+            }
+
+            /* About Section */
+            .about-section {
+                padding: 50px 0;
+            }
+
+            .about-container {
+                padding: 0;
+            }
+
+            /* Footer */
+            footer {
+                padding: 30px 0;
+            }
+
+            .footer-disclaimer p {
+                font-size: 0.7rem;
+            }
+        }
+
+        /* Small phones */
+        @media (max-width: 480px) {
+            .hero-content h1 {
+                font-size: 1.5rem;
+            }
+
+            .nav-link {
+                padding: 6px 8px;
+                font-size: 0.7rem;
+            }
+
+            .card-value {
+                font-size: 1.5rem;
+            }
+
+            .diff-center-value {
+                font-size: 2rem;
+            }
+
+            .about-title {
+                font-size: 1.3rem;
+            }
+        }
+
+        /* Hide status pill on mobile */
+        @media (max-width: 640px) {
+            .status-pill {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-inner">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <span class="logo-initials">M</span>
+                    </div>
+                    <div class="logo-content">
+                        <span class="logo-text">Morocota</span>
+                        <span class="logo-slogan">Decisiones que valen oro</span>
+                    </div>
+                </div>
+                <nav class="nav">
+                    <a href="#tasas" class="nav-link">Cotizaciones</a>
+                    <a href="#conversor" class="nav-link">Conversor</a>
+                    <a href="#como-pagar" class="nav-link">Cómo pagar</a>
+                    <a href="#info" class="nav-link">Fuentes</a>
+                    <a href="#nosotros" class="nav-link">Nosotros</a>
+                    <div class="status-pill">
+                        <span class="status-dot"></span>
+                        <span class="status-text">En línea</span>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="conversor">
+        <div class="container">
+            <div class="hero-grid">
+                <div class="hero-content">
+                    <h1>El valor de la verdad, <span>en tiempo real</span></h1>
+                    <p class="hero-subtitle">
+                        Todas las tasas del mercado venezolano en una sola plataforma. 
+                        Consulte, compare y tome decisiones financieras informadas.
+                    </p>
+                    <div class="hero-cta">
+                        <a href="#tasas" class="btn btn-primary">Ver cotizaciones</a>
+                        <a href="#como-pagar" class="btn btn-secondary">Cómo pagar</a>
+                    </div>
+                </div>
+                <div class="hero-card">
+                    <div class="converter-header">
+                        <span class="converter-title">Conversor rápido</span>
+                        <div class="rate-selector-mini">
+                            <select class="rate-select" id="conversor-rate-select" onchange="onConversorRateChange()">
+                                <option value="USD">Dólar BCV</option>
+                                <option value="EUR">Euro BCV</option>
+                                <option value="PROMEDIO">Promedio BCV</option>
+                                <option value="PARALELO">EnParaleloVzla</option>
+                                <option value="DOLARTODAY">DolarToday</option>
+                                <option value="BINANCE">Binance P2P</option>
+                            </select>
+                            <span class="select-arrow">
+                                <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="converter-inputs">
+                        <div class="input-group">
+                            <label class="input-label">USD</label>
+                            <input type="number" class="input-field" id="usd-input" value="100" step="0.01" oninput="convertCurrency()" placeholder="0.00">
+                        </div>
+                        <button class="swap-btn" onclick="swapCurrency()">
+                            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
+                            </svg>
+                        </button>
+                        <div class="input-group">
+                            <label class="input-label">VES</label>
+                            <input type="number" class="input-field" id="ves-input" value="0" step="0.01" oninput="convertCurrencyReverse()" placeholder="0.00">
+                        </div>
+                    </div>
+                    <div class="converter-rate">
+                        <span class="rate-badge" id="applied-rate">1 USD = -- Bs</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Rates Section -->
+    <section class="rates-section" id="tasas">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Cotizaciones</span>
+                <h2 class="section-title">Tasas del día</h2>
+                <p class="section-subtitle">Comparativa completa del mercado cambiario venezolano</p>
+            </div>
+
+            <div class="rates-grid">
+                <!-- USD BCV -->
+                <div class="rate-card featured">
+                    <div class="chart-tooltip" id="chart-usd">
+                        <div class="chart-header">
+                            <span class="chart-title">Dólar BCV</span>
+                            <span class="chart-period">Últimos 7 días</span>
+                        </div>
+                        <div class="chart-container">
+                            <svg class="chart-svg" viewBox="0 0 240 80" preserveAspectRatio="none">
+                                <defs>
+                                    <linearGradient id="chartGradientUSD" x1="0%" y1="0%" x2="0%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#C5A059;stop-opacity:0.3"/>
+                                        <stop offset="100%" style="stop-color:#C5A059;stop-opacity:0"/>
+                                    </linearGradient>
+                                </defs>
+                                <path class="chart-area" d="" id="area-usd" fill="url(#chartGradientUSD)"/>
+                                <path class="chart-line" d="" id="line-usd"/>
+                            </svg>
+                        </div>
+                        <div class="chart-stats">
+                            <div class="chart-stat">
+                                <div class="chart-stat-label">Mín</div>
+                                <div class="chart-stat-value" id="min-usd">--</div>
+                            </div>
+                            <div class="chart-stat">
+                                <div class="chart-stat-label">Máx</div>
+                                <div class="chart-stat-value" id="max-usd">--</div>
+                            </div>
+                            <div class="chart-stat">
+                                <div class="chart-stat-label">7 días</div>
+                                <div class="chart-stat-value up" id="change-usd">--</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-header">
+                        <div class="card-info">
+                            <h3>Dólar BCV</h3>
+                            <a href="https://www.bcv.org.ve/" target="_blank" rel="noopener" class="card-source-link">Ver fuente ↗</a>
+                        </div>
+                        <span class="card-badge official">Oficial</span>
+                    </div>
+                    <div class="card-value" id="usd-rate">--</div>
+                    <div class="card-footer">
+                        <div class="card-unit">Bolívares por dólar</div>
+                        <div class="card-variation up" id="usd-variation">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M18 15l-6-6-6 6"/>
+                            </svg>
+                            <span>+0.12%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EUR BCV -->
+                <div class="rate-card">
+                    <div class="chart-tooltip" id="chart-eur">
+                        <div class="chart-header">
+                            <span class="chart-title">Euro BCV</span>
+                            <span class="chart-period">Últimos 7 días</span>
+                        </div>
+                        <div class="chart-container">
+                            <svg class="chart-svg" viewBox="0 0 240 80" preserveAspectRatio="none">
+                                <defs>
+                                    <linearGradient id="chartGradientEUR" x1="0%" y1="0%" x2="0%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#C5A059;stop-opacity:0.3"/>
+                                        <stop offset="100%" style="stop-color:#C5A059;stop-opacity:0"/>
+                                    </linearGradient>
+                                </defs>
+                                <path class="chart-area" d="" id="area-eur" fill="url(#chartGradientEUR)"/>
+                                <path class="chart-line" d="" id="line-eur"/>
+                            </svg>
+                        </div>
+                        <div class="chart-stats">
+                            <div class="chart-stat">
+                                <div class="chart-stat-label">Mín</div>
+                                <div class="chart-stat-value" id="min-eur">--</div>
+                            </div>
+                            <div class="chart-stat">
+                                <div class="chart-stat-label">Máx</div>
+                                <div class="chart-stat-value" id="max-eur">--</div>
+                            </div>
+                            <div class="chart-stat">
+                                <div class="chart-stat-label">7 días</div>
+                                <div class="chart-stat-value up" id="change-eur">--</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-header">
+                        <div class="card-info">
+                            <h3>Euro BCV</h3>
+                            <a href="https://www.bcv.org.ve/" target="_blank" rel="noopener" class="card-source-link">Ver fuente ↗</a>
+                        </div>
+                        <span class="card-badge official">Oficial</span>
+                    </div>
+                    <div class="card-value" id="eur-rate">--</div>
+                    <div class="card-footer">
+                        <div class="card-unit">Bolívares por euro</div>
+                        <div class="card-variation up" id="eur-variation">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M18 15l-6-6-6 6"/>
+                            </svg>
+                            <span>+0.08%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Promedio BCV -->
+                <div class="rate-card">
+                    <div class="chart-tooltip" id="chart-promedio">
+                        <div class="chart-header">
+                            <span class="chart-title">Promedio BCV</span>
+                            <span class="chart-period">Últimos 7 días</span>
+                        </div>
+                        <div class="chart-container">
+                            <svg class="chart-svg" viewBox="0 0 240 80" preserveAspectRatio="none">
+                                <defs>
+                                    <linearGradient id="chartGradientPROMEDIO" x1="0%" y1="0%" x2="0%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#C5A059;stop-opacity:0.3"/>
+                                        <stop offset="100%" style="stop-color:#C5A059;stop-opacity:0"/>
+                                    </linearGradient>
+                                </defs>
+                                <path class="chart-area" d="" id="area-promedio" fill="url(#chartGradientPROMEDIO)"/>
+                                <path class="chart-line" d="" id="line-promedio"/>
+                            </svg>
+                        </div>
+                        <div class="chart-stats">
+                            <div class="chart-stat">
+                                <div class="chart-stat-label">Mín</div>
+                                <div class="chart-stat-value" id="min-promedio">--</div>
+                            </div>
+                            <div class="chart-stat">
+                                <div class="chart-stat-label">Máx</div>
+                                <div class="chart-stat-value" id="max-promedio">--</div>
+                            </div>
+                            <div class="chart-stat">
+                                <div class="chart-stat-label">7 días</div>
+                                <div class="chart-stat-value up" id="change-promedio">--</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-header">
+                        <div class="card-info">
+                            <h3>Promedio BCV</h3>
+                            <span class="card-source-text">(USD + EUR) ÷ 2</span>
+                        </div>
+                        <span class="card-badge">Calculado</span>
+                    </div>
+                    <div class="card-value" id="promedio-rate">--</div>
+                    <div class="card-footer">
+                        <div class="card-unit">Bolívares por dólar</div>
+                        <div class="card-variation up" id="promedio-variation">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M18 15l-6-6-6 6"/>
+                            </svg>
+                            <span>+0.10%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EnParaleloVzla -->
+                <div class="rate-card">
+                    <div class="chart-tooltip" id="chart-paralelo">
+                        <div class="chart-header">
+                            <span class="chart-title">EnParaleloVzla</span>
+                            <span class="chart-period">Últimos 7 días</span>
+                        </div>
+                        <div class="chart-container">
+                            <svg class="chart-svg" viewBox="0 0 240 80" preserveAspectRatio="none">
+                                <defs>
+                                    <linearGradient id="chartGradientPARALELO" x1="0%" y1="0%" x2="0%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#C5A059;stop-opacity:0.3"/>
+                                        <stop offset="100%" style="stop-color:#C5A059;stop-opacity:0"/>
+                                    </linearGradient>
+                                </defs>
+                                <path class="chart-area" d="" id="area-paralelo" fill="url(#chartGradientPARALELO)"/>
+                                <path class="chart-line" d="" id="line-paralelo"/>
+                            </svg>
+                        </div>
+                        <div class="chart-stats">
+                            <div class="chart-stat">
+                                <div class="chart-stat-label">Mín</div>
+                                <div class="chart-stat-value" id="min-paralelo">--</div>
+                            </div>
+                            <div class="chart-stat">
+                                <div class="chart-stat-label">Máx</div>
+                                <div class="chart-stat-value" id="max-paralelo">--</div>
+                            </div>
+                            <div class="chart-stat">
+                                <div class="chart-stat-label">7 días</div>
+                                <div class="chart-stat-value down" id="change-paralelo">--</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-header">
+                        <div class="card-info">
+                            <h3>EnParaleloVzla</h3>
+                            <a href="https://www.instagram.com/enaboralelovzla/" target="_blank" rel="noopener" class="card-source-link">Ver fuente ↗</a>
+                        </div>
+                        <span class="card-badge">Paralelo</span>
+                    </div>
+                    <div class="card-value" id="paralelo-rate">--</div>
+                    <div class="card-footer">
+                        <div class="card-unit">Bolívares por dólar</div>
+                        <div class="card-variation down" id="paralelo-variation">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M6 9l6 6 6-6"/>
+                            </svg>
+                            <span>-0.25%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DolarToday -->
+                <div class="rate-card">
+                    <div class="chart-tooltip" id="chart-dolartoday">
+                        <div class="chart-header">
+                            <span class="chart-title">DolarToday</span>
+                            <span class="chart-period">Últimos 7 días</span>
+                        </div>
+                        <div class="chart-container">
+                            <svg class="chart-svg" viewBox="0 0 240 80" preserveAspectRatio="none">
+                                <defs>
+                                    <linearGradient id="chartGradientDOLARTODAY" x1="0%" y1="0%" x2="0%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#C5A059;stop-opacity:0.3"/>
+                                        <stop offset="100%" style="stop-color:#C5A059;stop-opacity:0"/>
+                                    </linearGradient>
+                                </defs>
+                                <path class="chart-area" d="" id="area-dolartoday" fill="url(#chartGradientDOLARTODAY)"/>
+                                <path class="chart-line" d="" id="line-dolartoday"/>
+                            </svg>
+                        </div>
+                        <div class="chart-stats">
+                            <div class="chart-stat">
+                                <div class="chart-stat-label">Mín</div>
+                                <div class="chart-stat-value" id="min-dolartoday">--</div>
+                            </div>
+                            <div class="chart-stat">
+                                <div class="chart-stat-label">Máx</div>
+                                <div class="chart-stat-value" id="max-dolartoday">--</div>
+                            </div>
+                            <div class="chart-stat">
+                                <div class="chart-stat-label">7 días</div>
+                                <div class="chart-stat-value" id="change-dolartoday">--</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-header">
+                        <div class="card-info">
+                            <h3>DolarToday</h3>
+                            <a href="https://dolartoday.com/" target="_blank" rel="noopener" class="card-source-link">Ver fuente ↗</a>
+                        </div>
+                        <span class="card-badge">Referencia</span>
+                    </div>
+                    <div class="card-value" id="dolartoday-rate">--</div>
+                    <div class="card-footer">
+                        <div class="card-unit">Bolívares por dólar</div>
+                        <div class="card-variation neutral" id="dolartoday-variation">
+                            <span>0.00%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Binance -->
+                <div class="rate-card">
+                    <div class="chart-tooltip" id="chart-binance">
+                        <div class="chart-header">
+                            <span class="chart-title">Binance P2P</span>
+                            <span class="chart-period">Últimos 7 días</span>
+                        </div>
+                        <div class="chart-container">
+                            <svg class="chart-svg" viewBox="0 0 240 80" preserveAspectRatio="none">
+                                <defs>
+                                    <linearGradient id="chartGradientBINANCE" x1="0%" y1="0%" x2="0%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#C5A059;stop-opacity:0.3"/>
+                                        <stop offset="100%" style="stop-color:#C5A059;stop-opacity:0"/>
+                                    </linearGradient>
+                                </defs>
+                                <path class="chart-area" d="" id="area-binance" fill="url(#chartGradientBINANCE)"/>
+                                <path class="chart-line" d="" id="line-binance"/>
+                            </svg>
+                        </div>
+                        <div class="chart-stats">
+                            <div class="chart-stat">
+                                <div class="chart-stat-label">Mín</div>
+                                <div class="chart-stat-value" id="min-binance">--</div>
+                            </div>
+                            <div class="chart-stat">
+                                <div class="chart-stat-label">Máx</div>
+                                <div class="chart-stat-value" id="max-binance">--</div>
+                            </div>
+                            <div class="chart-stat">
+                                <div class="chart-stat-label">7 días</div>
+                                <div class="chart-stat-value up" id="change-binance">--</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-header">
+                        <div class="card-info">
+                            <h3>Binance P2P</h3>
+                            <a href="https://p2p.binance.com/es-LA/trade/sell/USDT?fiat=VES" target="_blank" rel="noopener" class="card-source-link">Ver fuente ↗</a>
+                        </div>
+                        <span class="card-badge">Cripto</span>
+                    </div>
+                    <div class="card-value" id="binance-rate">--</div>
+                    <div class="card-footer">
+                        <div class="card-unit">Bolívares por USDT</div>
+                        <div class="card-variation up" id="binance-variation">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M18 15l-6-6-6 6"/>
+                            </svg>
+                            <span>+0.35%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="update-bar">
+                <div class="update-item">
+                    Actualizado: <strong id="last-update-time">--:--:--</strong>
+                </div>
+                <button class="refresh-btn" id="refresh-btn" onclick="fetchRates()">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                    </svg>
+                    Actualizar
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Differential Section -->
+    <section class="differential-section">
+        <div class="container">
+            <div class="diff-card">
+                <div class="diff-header">
+                    <h3 class="diff-title">Comparador de tasas</h3>
+                    <div class="diff-selectors">
+                        <div class="diff-select-wrapper">
+                            <select class="diff-select" id="oficial-rate-select" onchange="updateDiferencialComparison()">
+                                <option value="USD">Dólar BCV</option>
+                                <option value="EUR">Euro BCV</option>
+                                <option value="PROMEDIO">Promedio BCV</option>
+                            </select>
+                            <div class="diff-select-arrow">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M6 9l6 6 6-6"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <span class="diff-vs">vs</span>
+                        <div class="diff-select-wrapper">
+                            <select class="diff-select" id="compare-rate-select" onchange="updateDiferencialComparison()">
+                                <option value="PARALELO">EnParaleloVzla</option>
+                                <option value="DOLARTODAY">DolarToday</option>
+                                <option value="BINANCE">Binance P2P</option>
+                            </select>
+                            <div class="diff-select-arrow">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M6 9l6 6 6-6"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="diff-content">
+                    <div class="diff-item">
+                        <div class="diff-item-label" id="diff-oficial-name">Dólar BCV</div>
+                        <div class="diff-item-value" id="diff-oficial">--</div>
+                        <div class="diff-item-source" id="diff-oficial-source">Banco Central</div>
+                    </div>
+                    <div class="diff-item">
+                        <div class="diff-item-label">Diferencial</div>
+                        <div class="diff-center-value" id="diferencial-value">--</div>
+                    </div>
+                    <div class="diff-item">
+                        <div class="diff-item-label" id="diff-compare-name">Paralelo</div>
+                        <div class="diff-item-value" id="diff-paralelo">--</div>
+                        <div class="diff-item-source" id="diff-compare-source">EnParaleloVzla</div>
+                    </div>
+                </div>
+                <div class="diff-alert" id="diferencial-alert">
+                    <p><strong>Volatilidad elevada:</strong> <span id="diferencial-message"></span></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Payment Section -->
+    <section class="payment-section" id="como-pagar">
+        <div class="container">
+            <div class="payment-card">
+                <div class="payment-header">
+                    <h2 class="payment-title">¿Conviene pagar en USD o Bs?</h2>
+                    <p class="payment-subtitle">Compare opciones y tome la mejor decisión</p>
+                </div>
+
+                <div class="toggle-group">
+                    <button class="toggle-btn active" id="toggle-usd" onclick="setPaymentCurrency('USD')">Tengo USD</button>
+                    <button class="toggle-btn" id="toggle-bs" onclick="setPaymentCurrency('BS')">Tengo Bs</button>
+                </div>
+
+                <div class="payment-inputs">
+                    <div class="payment-input-group">
+                        <label>Precio en USD (tasa BCV)</label>
+                        <input type="number" class="payment-input" id="price-usd-input" value="100" step="0.01" oninput="calculatePaymentOptions()" placeholder="0.00">
+                    </div>
+                    <div class="payment-input-group">
+                        <label>% Descuento por USD</label>
+                        <input type="number" class="payment-input" id="discount-input" value="10" step="0.5" min="0" max="100" oninput="calculatePaymentOptions()" placeholder="10">
+                    </div>
+                </div>
+
+                <div class="rate-dropdown-group">
+                    <label>Tasa de cambio disponible</label>
+                    <div class="rate-dropdown-wrapper">
+                        <select class="rate-dropdown-full" id="rate-select" onchange="onRateSelectChange()">
+                            <option value="PARALELO">EnParaleloVzla</option>
+                            <option value="DOLARTODAY">DolarToday</option>
+                            <option value="BINANCE">Binance P2P</option>
+                            <option value="USD">Dólar BCV</option>
+                            <option value="EUR">Euro BCV</option>
+                            <option value="PROMEDIO">Promedio BCV</option>
+                            <option value="PERSONAL">Personalizada</option>
+                        </select>
+                        <div class="rate-dropdown-arrow">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M6 9l6 6 6-6"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="payment-input-group" id="personal-rate-group" style="display: none; margin-bottom: 24px;">
+                    <label>Ingrese su tasa (Bs/$)</label>
+                    <input type="number" class="payment-input" id="personal-rate-input" step="0.01" oninput="calculatePaymentOptions()" placeholder="Ej: 65.00">
+                </div>
+
+                <div class="comparison-box">
+                    <h4 class="comparison-title">Comparación de opciones</h4>
+                    <div class="comparison-option" id="option-a-container">
+                        <div class="option-info">
+                            <span class="option-label" id="option-a-label">Opción A: Pagar en USD con descuento</span>
+                            <div class="option-badge" id="option-a-badge" style="display: none;">
+                                <svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                                Mejor opción
+                            </div>
+                        </div>
+                        <span class="option-amount" id="option-a-amount">$--</span>
+                    </div>
+                    <div class="comparison-option" id="option-b-container">
+                        <div class="option-info">
+                            <span class="option-label" id="option-b-label">Opción B: Vender USD y pagar en Bs</span>
+                            <div class="option-badge" id="option-b-badge" style="display: none;">
+                                <svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                                Mejor opción
+                            </div>
+                        </div>
+                        <span class="option-amount" id="option-b-amount">$--</span>
+                    </div>
+                </div>
+
+                <div class="recommendation-box">
+                    <h4 class="recommendation-title">Recomendación</h4>
+                    <p class="recommendation-text" id="recommendation-text">Ingrese los datos para obtener una recomendación personalizada.</p>
+                </div>
+
+                <div class="equilibrium-grid">
+                    <div class="equilibrium-item">
+                        <div class="equilibrium-label">Tasa de equilibrio</div>
+                        <div class="equilibrium-value" id="equilibrium-rate">-- Bs/$</div>
+                    </div>
+                    <div class="equilibrium-item">
+                        <div class="equilibrium-label">Descuento de equilibrio</div>
+                        <div class="equilibrium-value" id="equilibrium-discount">--%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Info Section -->
+    <section class="info-section" id="info">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Información</span>
+                <h2 class="section-title">Fuentes y metodología</h2>
+                <p class="section-subtitle">Conozca de dónde provienen los datos</p>
+            </div>
+
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3>Tasas Oficiales BCV</h3>
+                    <p>Publicadas por el Banco Central de Venezuela. Representan el promedio ponderado de las operaciones diarias realizadas por las mesas de cambio de instituciones bancarias autorizadas.</p>
+                </div>
+                <div class="info-card">
+                    <h3>Promedio BCV</h3>
+                    <p>Tasa calculada como la media aritmética entre las cotizaciones del dólar y el euro del BCV: (USD + EUR) ÷ 2. Ofrece una referencia alternativa basada en datos oficiales.</p>
+                </div>
+                <div class="info-card">
+                    <h3>EnParaleloVzla</h3>
+                    <p>Promedio de tasas reportadas por casas de cambio y corredores del mercado paralelo. Publicado diariamente por @enparalelovzla en Instagram a las 9:00 AM y 1:00 PM.</p>
+                </div>
+                <div class="info-card">
+                    <h3>DolarToday</h3>
+                    <p>Plataforma fundada en 2010, primera referencia del dólar paralelo. Basado en transacciones informales y cotizaciones de operadores no oficiales del mercado cambiario.</p>
+                </div>
+                <div class="info-card">
+                    <h3>Binance P2P</h3>
+                    <p>Precio del USDT en bolívares según el mercado peer-to-peer de Binance. Calculado como el promedio de las primeras 10 ofertas de compra y venta disponibles.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section - Storytelling -->
+    <section class="about-section" id="nosotros">
+        <div class="container">
+            <div class="about-container">
+                <div class="about-icon">🪙</div>
+                <span class="about-tag">Nuestra historia</span>
+                <h2 class="about-title">Antes pesaba en el bolsillo, ahora pesa en tu decisión.</h2>
+                
+                <div class="about-content">
+                    <p class="about-text">
+                        Hace un siglo, los venezolanos protegían su patrimonio enterrando "Morocotas": monedas de 20 dólares estadounidenses famosas por sus 33 gramos de oro macizo.
+                    </p>
+                    
+                    <p class="about-text highlight">
+                        "Decían que quien tenía una morocota, tenía tranquilidad."
+                    </p>
+                    
+                    <p class="about-text conclusion">
+                        Nosotros recuperamos ese nombre para darte la herramienta moderna de esa seguridad: información clara y al día sobre el dólar, porque antes el valor pesaba en el bolsillo, ahora pesa en tu decisión.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="footer-logo">M</div>
+                    <span class="footer-brand-text">Morocota</span>
+                </div>
+                <div class="footer-text">
+                    <p class="footer-tagline">Decisiones que valen oro</p>
+                </div>
+            </div>
+            <div class="footer-disclaimer">
+                <p><strong>Descargo de Responsabilidad:</strong> Los datos mostrados en Morocota son estrictamente referenciales y educativos. No fijamos tasas ni realizamos operaciones cambiarias. No nos hacemos responsables por el uso especulativo de esta información ni por las decisiones tomadas con base en ella.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ============== CONFIGURACIÓN API ==============
+        // La API se sirve desde Netlify Functions
+        const API_URL = '/.netlify/functions';
+        
+        // Rates data (se actualizará desde la API)
+        let rates = {
+            USD: 0,
+            EUR: 0,
+            get PROMEDIO() {
+                return (this.USD + this.EUR) / 2;
+            },
+            PARALELO: 0,
+            DOLARTODAY: 0,
+            BINANCE: 0
+        };
+
+        // Variaciones (se actualizarán desde la API)
+        let variations = {
+            USD: 0,
+            EUR: 0,
+            PROMEDIO: 0,
+            PARALELO: 0,
+            DOLARTODAY: 0,
+            BINANCE: 0
+        };
+
+        // Datos históricos (se actualizarán desde la API)
+        let historicalData = {
+            USD: [],
+            EUR: [],
+            PROMEDIO: [],
+            PARALELO: [],
+            DOLARTODAY: [],
+            BINANCE: []
+        };
+
+        const dayLabels = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Hoy'];
+
+        let updateInterval;
+        let conversorSelectedRate = 'USD';
+
+        function formatCurrency(value, decimals = 2) {
+            return parseFloat(value).toFixed(decimals).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        function updateTimestamp() {
+            const now = new Date();
+            const shortTime = now.toLocaleTimeString('es-VE', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            document.getElementById('last-update-time').textContent = shortTime;
+        }
+
+        function calculateDiferencial() {
+            updateDiferencialComparison();
+        }
+
+        function updateDiferencialComparison() {
+            const oficialSelect = document.getElementById('oficial-rate-select');
+            const compareSelect = document.getElementById('compare-rate-select');
+            const selectedOficial = oficialSelect.value;
+            const selectedCompare = compareSelect.value;
+            
+            let oficialRate = 0, oficialName = '', oficialSource = '';
+            switch(selectedOficial) {
+                case 'USD': oficialRate = rates.USD; oficialName = 'Dólar BCV'; oficialSource = 'Banco Central'; break;
+                case 'EUR': oficialRate = rates.EUR; oficialName = 'Euro BCV'; oficialSource = 'Banco Central'; break;
+                case 'PROMEDIO': oficialRate = rates.PROMEDIO; oficialName = 'Promedio BCV'; oficialSource = '(USD + EUR) ÷ 2'; break;
+            }
+            
+            let compareRate = 0, compareName = '', compareSource = '';
+            switch(selectedCompare) {
+                case 'PARALELO': compareRate = rates.PARALELO; compareName = 'Paralelo'; compareSource = 'EnParaleloVzla'; break;
+                case 'DOLARTODAY': compareRate = rates.DOLARTODAY; compareName = 'DolarToday'; compareSource = 'dolartoday.com'; break;
+                case 'BINANCE': compareRate = rates.BINANCE; compareName = 'Binance'; compareSource = 'USDT/VES'; break;
+            }
+            
+            const diferencial = ((compareRate - oficialRate) / oficialRate * 100);
+            
+            document.getElementById('diferencial-value').textContent = `${diferencial >= 0 ? '+' : ''}${formatCurrency(diferencial, 1)}%`;
+            document.getElementById('diff-oficial').textContent = `Bs. ${formatCurrency(oficialRate)}`;
+            document.getElementById('diff-paralelo').textContent = `Bs. ${formatCurrency(compareRate)}`;
+            document.getElementById('diff-oficial-name').textContent = oficialName;
+            document.getElementById('diff-oficial-source').textContent = oficialSource;
+            document.getElementById('diff-compare-name').textContent = compareName;
+            document.getElementById('diff-compare-source').textContent = compareSource;
+            
+            const alertDiv = document.getElementById('diferencial-alert');
+            const messageSpan = document.getElementById('diferencial-message');
+            if (diferencial > 40) {
+                alertDiv.classList.add('show');
+                messageSpan.textContent = `El diferencial alcanza ${formatCurrency(diferencial, 1)}%. Se recomienda prudencia.`;
+            } else {
+                alertDiv.classList.remove('show');
+            }
+        }
+
+        function updateVariations() {
+            const keys = ['usd', 'eur', 'promedio', 'paralelo', 'dolartoday', 'binance'];
+            const varKeys = ['USD', 'EUR', 'PROMEDIO', 'PARALELO', 'DOLARTODAY', 'BINANCE'];
+            
+            keys.forEach((key, index) => {
+                const variation = variations[varKeys[index]];
+                const element = document.getElementById(`${key}-variation`);
+                if (element) {
+                    const isUp = variation > 0;
+                    const isDown = variation < 0;
+                    const isNeutral = variation === 0;
+                    
+                    element.classList.remove('up', 'down', 'neutral');
+                    if (isUp) element.classList.add('up');
+                    else if (isDown) element.classList.add('down');
+                    else element.classList.add('neutral');
+                    
+                    const arrow = isUp 
+                        ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 15l-6-6-6 6"/></svg>'
+                        : isDown 
+                        ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>'
+                        : '';
+                    
+                    const sign = isUp ? '+' : '';
+                    element.innerHTML = `
+                        <div class="card-variation-value">${arrow}<span>${sign}${variation.toFixed(2)}%</span></div>
+                        <div class="card-variation-label">vs. ayer</div>
+                    `;
+                }
+            });
+        }
+
+        function renderCharts() {
+            const keys = ['usd', 'eur', 'promedio', 'paralelo', 'dolartoday', 'binance'];
+            const dataKeys = ['USD', 'EUR', 'PROMEDIO', 'PARALELO', 'DOLARTODAY', 'BINANCE'];
+            
+            keys.forEach((key, index) => {
+                const data = historicalData[dataKeys[index]];
+                if (!data || data.length === 0) return;
+                
+                const min = Math.min(...data);
+                const max = Math.max(...data);
+                const range = max - min || 1;
+                const width = 240;
+                const height = 80;
+                const padding = 5;
+                
+                // Generar puntos para el path
+                const points = data.map((value, i) => {
+                    const x = (i / (data.length - 1)) * width;
+                    const y = height - padding - ((value - min) / range) * (height - padding * 2);
+                    return { x, y };
+                });
+                
+                // Crear path para la línea
+                const linePath = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
+                
+                // Crear path para el área
+                const areaPath = `${linePath} L ${width} ${height} L 0 ${height} Z`;
+                
+                // Actualizar SVG
+                const lineElement = document.getElementById(`line-${key}`);
+                const areaElement = document.getElementById(`area-${key}`);
+                
+                if (lineElement) lineElement.setAttribute('d', linePath);
+                if (areaElement) areaElement.setAttribute('d', areaPath);
+                
+                // Actualizar estadísticas
+                const change = ((data[data.length - 1] - data[0]) / data[0] * 100);
+                const changeElement = document.getElementById(`change-${key}`);
+                
+                document.getElementById(`min-${key}`).textContent = formatCurrency(min);
+                document.getElementById(`max-${key}`).textContent = formatCurrency(max);
+                
+                if (changeElement) {
+                    changeElement.classList.remove('up', 'down');
+                    if (change > 0) changeElement.classList.add('up');
+                    else if (change < 0) changeElement.classList.add('down');
+                    changeElement.textContent = `${change >= 0 ? '+' : ''}${change.toFixed(2)}%`;
+                }
+            });
+        }
+
+        async function fetchRates() {
+            const btn = document.getElementById('refresh-btn');
+            btn.disabled = true;
+            btn.innerHTML = '<svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="animation: spin 1s linear infinite;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg> Actualizando...';
+            
+            try {
+                const response = await fetch(`${API_URL}/rates`);
+                
+                if (!response.ok) {
+                    throw new Error(`Error ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                
+                if (data.error) {
+                    throw new Error(data.message || 'Error obteniendo datos');
+                }
+                
+                // Actualizar rates - null si no está disponible
+                rates.USD = data.rates.USD;
+                rates.EUR = data.rates.EUR;
+                rates.PARALELO = data.rates.PARALELO;
+                rates.DOLARTODAY = data.rates.DOLARTODAY;
+                rates.BINANCE = data.rates.BINANCE;
+                
+                // Guardar estado de fuentes
+                window.sourcesStatus = data.sources || {};
+                
+                console.log('✅ Datos obtenidos:', data);
+                
+                // Actualizar UI con datos reales o mostrar no disponible
+                updateRateDisplay('usd-rate', rates.USD);
+                updateRateDisplay('eur-rate', rates.EUR);
+                updateRateDisplay('promedio-rate', rates.PROMEDIO);
+                updateRateDisplay('paralelo-rate', rates.PARALELO);
+                updateRateDisplay('dolartoday-rate', rates.DOLARTODAY);
+                updateRateDisplay('binance-rate', rates.BINANCE);
+                
+                updateAppliedRate();
+                convertCurrency();
+                updateTimestamp();
+                calculateDiferencial();
+                updateRateDropdownOptions();
+                calculatePaymentOptions();
+                
+                // Mostrar estado de conexión
+                showConnectionStatus(true, data.cached ? 'Cache' : 'En vivo');
+                
+            } catch (error) {
+                console.error('❌ Error:', error.message);
+                
+                // Mostrar error en UI - NO usar datos de ejemplo
+                showConnectionStatus(false, error.message);
+                
+                // Marcar todas las tasas como no disponibles
+                ['usd-rate', 'eur-rate', 'promedio-rate', 'paralelo-rate', 'dolartoday-rate', 'binance-rate'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) {
+                        el.textContent = 'No disponible';
+                        el.style.color = 'var(--text-muted)';
+                        el.style.fontSize = '1.2rem';
+                    }
+                });
+            }
+            
+            btn.disabled = false;
+            btn.innerHTML = '<svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg> Actualizar';
+        }
+        
+        // Mostrar valor de tasa o "No disponible"
+        function updateRateDisplay(elementId, value) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+            
+            if (value !== null && value !== undefined && value > 0) {
+                el.textContent = formatCurrency(value);
+                el.style.color = '';
+                el.style.fontSize = '';
+            } else {
+                el.textContent = 'No disponible';
+                el.style.color = 'var(--text-muted)';
+                el.style.fontSize = '1.2rem';
+            }
+        }
+        
+        // Mostrar estado de conexión
+        function showConnectionStatus(connected, message) {
+            const statusDot = document.querySelector('.status-dot');
+            const statusText = document.querySelector('.status-text');
+            
+            if (statusDot && statusText) {
+                if (connected) {
+                    statusDot.style.background = 'var(--success)';
+                    statusText.style.color = 'var(--success)';
+                    statusText.textContent = message || 'En línea';
+                } else {
+                    statusDot.style.background = 'var(--danger)';
+                    statusText.style.color = 'var(--danger)';
+                    statusText.textContent = 'Error';
+                }
+            }
+        }
+        }
+
+        // Converter functions
+        function getConversorRate() {
+            switch(conversorSelectedRate) {
+                case 'USD': return rates.USD;
+                case 'EUR': return rates.EUR;
+                case 'PROMEDIO': return rates.PROMEDIO;
+                case 'PARALELO': return rates.PARALELO;
+                case 'DOLARTODAY': return rates.DOLARTODAY;
+                case 'BINANCE': return rates.BINANCE;
+                default: return rates.USD;
+            }
+        }
+
+        function onConversorRateChange() {
+            conversorSelectedRate = document.getElementById('conversor-rate-select').value;
+            updateAppliedRate();
+            convertCurrency();
+        }
+
+        function updateAppliedRate() {
+            const rate = getConversorRate();
+            document.getElementById('applied-rate').textContent = `1 USD = ${formatCurrency(rate)} Bs`;
+        }
+
+        function convertCurrency() {
+            const usd = parseFloat(document.getElementById('usd-input').value) || 0;
+            const rate = getConversorRate();
+            document.getElementById('ves-input').value = formatCurrency(usd * rate);
+        }
+
+        function convertCurrencyReverse() {
+            const ves = parseFloat(document.getElementById('ves-input').value.replace(/,/g, '')) || 0;
+            const rate = getConversorRate();
+            document.getElementById('usd-input').value = formatCurrency(ves / rate);
+        }
+
+        function swapCurrency() {
+            const usdInput = document.getElementById('usd-input');
+            const vesInput = document.getElementById('ves-input');
+            const temp = usdInput.value;
+            usdInput.value = vesInput.value.replace(/,/g, '');
+            vesInput.value = temp;
+            convertCurrency();
+        }
+
+        // Payment calculator
+        let paymentCurrency = 'USD';
+        let selectedExchangeRate = 'PARALELO';
+
+        function setPaymentCurrency(currency) {
+            paymentCurrency = currency;
+            document.getElementById('toggle-usd').classList.toggle('active', currency === 'USD');
+            document.getElementById('toggle-bs').classList.toggle('active', currency === 'BS');
+            
+            if (currency === 'USD') {
+                document.getElementById('option-a-label').textContent = 'Opción A: Pagar en USD con descuento';
+                document.getElementById('option-b-label').textContent = 'Opción B: Vender USD y pagar en Bs';
+            } else {
+                document.getElementById('option-a-label').textContent = 'Opción A: Comprar USD y pagar con descuento';
+                document.getElementById('option-b-label').textContent = 'Opción B: Pagar directamente en Bs';
+            }
+            calculatePaymentOptions();
+        }
+
+        function onRateSelectChange() {
+            selectedExchangeRate = document.getElementById('rate-select').value;
+            document.getElementById('personal-rate-group').style.display = selectedExchangeRate === 'PERSONAL' ? 'block' : 'none';
+            calculatePaymentOptions();
+        }
+
+        function getSelectedRate() {
+            switch(selectedExchangeRate) {
+                case 'PARALELO': return rates.PARALELO;
+                case 'DOLARTODAY': return rates.DOLARTODAY;
+                case 'BINANCE': return rates.BINANCE;
+                case 'USD': return rates.USD;
+                case 'EUR': return rates.EUR;
+                case 'PROMEDIO': return rates.PROMEDIO;
+                case 'PERSONAL': return parseFloat(document.getElementById('personal-rate-input').value) || 0;
+                default: return rates.PARALELO;
+            }
+        }
+
+        function updateRateDropdownOptions() {
+            const select = document.getElementById('rate-select');
+            const names = {
+                'PARALELO': 'EnParaleloVzla', 'DOLARTODAY': 'DolarToday', 'BINANCE': 'Binance P2P',
+                'USD': 'Dólar BCV', 'EUR': 'Euro BCV', 'PROMEDIO': 'Promedio BCV', 'PERSONAL': 'Personalizada'
+            };
+            for (let option of select.options) {
+                const val = option.value;
+                let rateVal = val === 'PERSONAL' ? 'ingresar' : formatCurrency(rates[val] || rates.PROMEDIO);
+                option.textContent = `${names[val]} (${rateVal})`;
+            }
+        }
+
+        function calculatePaymentOptions() {
+            const priceUSD = parseFloat(document.getElementById('price-usd-input').value) || 0;
+            const discountPercent = parseFloat(document.getElementById('discount-input').value) || 0;
+            const exchangeRate = getSelectedRate();
+            const bcvRate = rates.USD;
+            
+            if (priceUSD <= 0 || exchangeRate <= 0) {
+                document.getElementById('option-a-amount').textContent = '$--';
+                document.getElementById('option-b-amount').textContent = '$--';
+                document.getElementById('recommendation-text').textContent = 'Ingrese los datos para obtener una recomendación.';
+                return;
+            }
+
+            let optionA, optionB, optionALabel, optionBLabel;
+            
+            if (paymentCurrency === 'USD') {
+                optionA = priceUSD * (1 - discountPercent / 100);
+                optionALabel = `$${formatCurrency(optionA)}`;
+                const priceBs = priceUSD * bcvRate;
+                optionB = priceBs / exchangeRate;
+                optionBLabel = `$${formatCurrency(optionB)}`;
+            } else {
+                const usdNeeded = priceUSD * (1 - discountPercent / 100);
+                optionA = usdNeeded * exchangeRate;
+                optionALabel = `Bs. ${formatCurrency(optionA)}`;
+                optionB = priceUSD * bcvRate;
+                optionBLabel = `Bs. ${formatCurrency(optionB)}`;
+            }
+
+            document.getElementById('option-a-amount').textContent = optionALabel;
+            document.getElementById('option-b-amount').textContent = optionBLabel;
+
+            const optionAContainer = document.getElementById('option-a-container');
+            const optionBContainer = document.getElementById('option-b-container');
+            const optionABadge = document.getElementById('option-a-badge');
+            const optionBBadge = document.getElementById('option-b-badge');
+
+            optionAContainer.classList.remove('best');
+            optionBContainer.classList.remove('best');
+            optionABadge.style.display = 'none';
+            optionBBadge.style.display = 'none';
+
+            let savings = 0, recommendation = '';
+
+            if (optionA < optionB) {
+                optionAContainer.classList.add('best');
+                optionABadge.style.display = 'inline-flex';
+                savings = optionB - optionA;
+                recommendation = paymentCurrency === 'USD' 
+                    ? `Te conviene <strong>pagar en USD</strong>. Ahorras <span class="recommendation-savings">$${formatCurrency(savings)}</span> comparado con vender tus dólares.`
+                    : `Te conviene <strong>comprar USD y pagar con descuento</strong>. Ahorras <span class="recommendation-savings">Bs. ${formatCurrency(savings)}</span>.`;
+            } else if (optionB < optionA) {
+                optionBContainer.classList.add('best');
+                optionBBadge.style.display = 'inline-flex';
+                savings = optionA - optionB;
+                recommendation = paymentCurrency === 'USD'
+                    ? `Te conviene <strong>vender USD y pagar en Bs</strong>. Ahorras <span class="recommendation-savings">$${formatCurrency(savings)}</span>.`
+                    : `Te conviene <strong>pagar directamente en Bs</strong>. Ahorras <span class="recommendation-savings">Bs. ${formatCurrency(savings)}</span>.`;
+            } else {
+                recommendation = 'Ambas opciones son equivalentes.';
+            }
+
+            document.getElementById('recommendation-text').innerHTML = recommendation;
+
+            const equilibriumRate = bcvRate / (1 - discountPercent / 100);
+            document.getElementById('equilibrium-rate').textContent = `${formatCurrency(equilibriumRate)} Bs/$`;
+
+            const equilibriumDiscount = (1 - bcvRate / exchangeRate) * 100;
+            document.getElementById('equilibrium-discount').textContent = `${formatCurrency(Math.max(0, equilibriumDiscount))}%`;
+        }
+
+        // Spin animation
+        const style = document.createElement('style');
+        style.textContent = `@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`;
+        document.head.appendChild(style);
+
+        // Smooth scroll para navegación
+        document.querySelectorAll('a.nav-link[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    const headerOffset = 80;
+                    const elementPosition = targetElement.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                    
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        async function init() {
+            await fetchRates();
+            if (updateInterval) clearInterval(updateInterval);
+            updateInterval = setInterval(fetchRates, 5 * 60 * 1000);
+        }
+
+        window.addEventListener('load', init);
+    </script>
+</body>
+</html>

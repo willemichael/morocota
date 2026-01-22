@@ -1,0 +1,22 @@
+{
+  "name": "morocota-netlify",
+  "version": "1.0.0",
+  "description": "Monitor de tasas de cambio venezolanas - Morocota",
+  "main": "functions/rates.js",
+  "scripts": {
+    "dev": "netlify dev",
+    "build": "echo 'No build needed'",
+    "deploy": "netlify deploy --prod"
+  },
+  "dependencies": {
+    "@netlify/functions": "^2.4.0",
+    "axios": "^1.6.0",
+    "cheerio": "^1.0.0-rc.12"
+  },
+  "devDependencies": {
+    "netlify-cli": "^17.0.0"
+  },
+  "keywords": ["venezuela", "dolar", "tasas", "cambio", "bcv"],
+  "author": "Morocota",
+  "license": "MIT"
+}
