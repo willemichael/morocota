@@ -41,16 +41,7 @@ exports.handler = async (event, context) => {
             { source: 'BINANCE', key: 'binance' }
         ];
 
-        const fetchMonitor = async ({ source, key }) => {
-            const targetUrl = `https://pydolarve.org/api/v1/dollar?monitor=${key}`;
-            const { data: rawData } = await axios.get(proxyUrl, {
-                timeout: timeoutMs,
-                params: {
-                    api_key: SCRAPER_API_KEY,
-                    url: targetUrl
-                }
-            });
-
+        const parseMonitorData = (rawData, key) => {
             const parsedData = typeof rawData === 'string' ? JSON.parse(rawData) : rawData;
             const data = parsedData?.monitors?.[key] || parsedData?.[key] || parsedData;
 
@@ -58,7 +49,27 @@ exports.handler = async (event, context) => {
                 throw new Error(data?.error || 'Respuesta inválida de ScraperAPI/PyDolarVe.');
             }
 
-            return { source, key, data };
+            return data;
+        };
+
+        const fetchMonitor = async ({ source, key }) => {
+            const targetUrl = `https://pydolarve.org/api/v1/dollar?monitor=${key}`;
+            try {
+                const { data: rawData } = await axios.get(proxyUrl, {
+                    timeout: timeoutMs,
+                    params: {
+                        api_key: SCRAPER_API_KEY,
+                        url: targetUrl,
+                        country_code: 'us'
+                    }
+                });
+                const data = parseMonitorData(rawData, key);
+                return { source, key, data, fetchedFrom: 'scraperapi' };
+            } catch (error) {
+                const { data: rawData } = await axios.get(targetUrl, { timeout: timeoutMs });
+                const data = parseMonitorData(rawData, key);
+                return { source, key, data, fetchedFrom: 'direct' };
+            }
         };
 
         const results = await Promise.allSettled(monitors.map(fetchMonitor));
@@ -68,6 +79,7 @@ exports.handler = async (event, context) => {
 
             if (result.status === 'fulfilled') {
                 const data = result.value.data;
+                const fetchedFrom = result.value.fetchedFrom;
                 if (key === 'bcv') {
                     rates.USD = data.price ? parseFloat(data.price) : null;
                     rates.EUR = data.price_eur ? parseFloat(data.price_eur) : null;
@@ -82,6 +94,8 @@ exports.handler = async (event, context) => {
                 sources[source] = data.price || data.price_eur ? 'ok' : 'unavailable';
                 if (!data.price && !data.price_eur) {
                     sourcesDetails[source] = 'Sin precio en respuesta.';
+                } else {
+                    sourcesDetails[source] = `Datos obtenidos vía ${fetchedFrom}.`;
                 }
             } else {
                 sources[source] = 'unavailable';
