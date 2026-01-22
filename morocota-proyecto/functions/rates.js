@@ -1,10 +1,9 @@
 const axios = require('axios');
 
 // ==========================================
-// 📍 AQUÍ VA TU API KEY DE SCRAPERAPI
+// 📍 Configura tu API KEY de ScraperAPI en Netlify
 // ==========================================
-const SCRAPER_API_KEY = '8ba7cc9eac524888e642e09924e929be'; 
-// ↑ Ejemplo: 'a1b2c3d4e5...' (Consérvala entre las comillas)
+const SCRAPER_API_KEY = process.env.SCRAPER_API_KEY;
 
 
 exports.handler = async (event, context) => {
@@ -15,29 +14,81 @@ exports.handler = async (event, context) => {
     };
 
     try {
+        if (!SCRAPER_API_KEY) {
+            throw new Error('Falta la variable de entorno SCRAPER_API_KEY en Netlify.');
+        }
+
         console.log("Iniciando consulta vía ScraperAPI...");
 
-        // 1. Preparamos la URL de destino (PyDolarVe con todos los monitores)
-        const targetUrl = 'https://pydolarve.org/api/v1/dollar?monitor=bcv,enparalelovzla,dolartoday,binance';
-        
-        // 2. Construimos la URL Puente (La petición pasa por ScraperAPI)
-        // ScraperAPI se encarga de ir a targetUrl sin ser bloqueado
-        const proxyUrl = `http://api.scraperapi.com?api_key=${SCRAPER_API_KEY}&url=${encodeURIComponent(targetUrl)}`;
+        const proxyUrl = 'https://api.scraperapi.com';
+        const timeoutMs = 9000;
+        const rates = {
+            USD: null,
+            EUR: null,
+            PROMEDIO: 0,
+            PARALELO: null,
+            DOLARTODAY: null,
+            BINANCE: null
+        };
+        const sources = {};
+        const sourcesDetails = {};
 
-        // 3. Hacemos la petición (Damos 9s de límite para no chocar con el límite de 10s de Netlify)
-        const { data } = await axios.get(proxyUrl, { timeout: 9000 });
+        const monitors = [
+            { source: 'BCV', key: 'bcv' },
+            { source: 'PARALELO', key: 'enparalelovzla' },
+            { source: 'DOLARTODAY', key: 'dolartoday' },
+            { source: 'BINANCE', key: 'binance' }
+        ];
+
+        const fetchMonitor = async ({ source, key }) => {
+            const targetUrl = `https://pydolarve.org/api/v1/dollar?monitor=${key}`;
+            const { data: rawData } = await axios.get(proxyUrl, {
+                timeout: timeoutMs,
+                params: {
+                    api_key: SCRAPER_API_KEY,
+                    url: targetUrl
+                }
+            });
+
+            const parsedData = typeof rawData === 'string' ? JSON.parse(rawData) : rawData;
+            const data = parsedData?.monitors?.[key] || parsedData?.[key] || parsedData;
+
+            if (!data || data.error) {
+                throw new Error(data?.error || 'Respuesta inválida de ScraperAPI/PyDolarVe.');
+            }
+
+            return { source, key, data };
+        };
+
+        const results = await Promise.allSettled(monitors.map(fetchMonitor));
+
+        results.forEach((result, index) => {
+            const { source, key } = monitors[index];
+
+            if (result.status === 'fulfilled') {
+                const data = result.value.data;
+                if (key === 'bcv') {
+                    rates.USD = data.price ? parseFloat(data.price) : null;
+                    rates.EUR = data.price_eur ? parseFloat(data.price_eur) : null;
+                } else if (key === 'enparalelovzla') {
+                    rates.PARALELO = data.price ? parseFloat(data.price) : null;
+                } else if (key === 'dolartoday') {
+                    rates.DOLARTODAY = data.price ? parseFloat(data.price) : null;
+                } else if (key === 'binance') {
+                    rates.BINANCE = data.price ? parseFloat(data.price) : null;
+                }
+
+                sources[source] = data.price || data.price_eur ? 'ok' : 'unavailable';
+                if (!data.price && !data.price_eur) {
+                    sourcesDetails[source] = 'Sin precio en respuesta.';
+                }
+            } else {
+                sources[source] = 'unavailable';
+                sourcesDetails[source] = result.reason?.message || 'Error consultando fuente.';
+            }
+        });
 
         console.log("Datos recibidos vía Proxy!");
-
-        // 4. Organizamos los datos
-        const rates = {
-            USD: data.bcv?.price || null,
-            EUR: data.bcv?.price_eur || null,
-            PROMEDIO: 0,
-            PARALELO: data.enparalelovzla?.price || null,
-            DOLARTODAY: data.dolartoday?.price || null,
-            BINANCE: data.binance?.price || null
-        };
 
         // Calcular promedio
         if (rates.USD && rates.EUR) {
@@ -50,10 +101,8 @@ exports.handler = async (event, context) => {
             body: JSON.stringify({
                 rates: rates,
                 timestamp: new Date().toISOString(),
-                sources: {
-                    BCV: rates.USD ? 'ok' : 'unavailable',
-                    PARALELO: rates.PARALELO ? 'ok' : 'unavailable'
-                }
+                sources,
+                sourcesDetails
             })
         };
 
