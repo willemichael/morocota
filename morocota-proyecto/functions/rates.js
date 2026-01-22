@@ -10,24 +10,14 @@ const CACHE_DURATION = 5 * 60 * 1000; // 5 minutos
 // ============== OBTENER DATOS REALES ==============
 
 async function getBCV() {
-    try {
-        // Fuente 1: pyDolarVe (más confiable)
-        const { data } = await axios.get('https://pydolarve.org/api/v1/dollar?page=bcv', {
-            timeout: 8000
-        });
-        
-        if (data?.monitors?.bcv?.price) {
-            return {
-                USD: data.monitors.bcv.price,
-                EUR: data.monitors.bcv.price_eur || null,
-                lastUpdate: data.monitors.bcv.last_update || null
-            };
-        }
-        throw new Error('BCV data not available');
-    } catch (error) {
-        console.error('Error BCV:', error.message);
-        return { USD: null, EUR: null, lastUpdate: null };
-    }
+    // DATOS DE PRUEBA (MOCK)
+    // Esto simula que el BCV respondió correctamente
+    console.log("Usando datos de prueba...");
+    return {
+        USD: 36.50,    // Precio fijo de prueba
+        EUR: 39.20,
+        lastUpdate: "Prueba Manual"
+    };
 }
 
 async function getParalelo() {
