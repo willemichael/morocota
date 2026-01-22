@@ -1,10 +1,9 @@
 const axios = require('axios');
 
 // ==========================================
-// 📍 AQUÍ VA TU API KEY DE SCRAPERAPI
+// 📍 Configura tu API KEY de ScraperAPI en Netlify
 // ==========================================
-const SCRAPER_API_KEY = '8ba7cc9eac524888e642e09924e929be'; 
-// ↑ Ejemplo: 'a1b2c3d4e5...' (Consérvala entre las comillas)
+const SCRAPER_API_KEY = process.env.SCRAPER_API_KEY;
 
 
 exports.handler = async (event, context) => {
@@ -15,6 +14,10 @@ exports.handler = async (event, context) => {
     };
 
     try {
+        if (!SCRAPER_API_KEY) {
+            throw new Error('Falta la variable de entorno SCRAPER_API_KEY en Netlify.');
+        }
+
         console.log("Iniciando consulta vía ScraperAPI...");
 
         // 1. Preparamos la URL de destino (PyDolarVe con todos los monitores)
@@ -22,10 +25,16 @@ exports.handler = async (event, context) => {
         
         // 2. Construimos la URL Puente (La petición pasa por ScraperAPI)
         // ScraperAPI se encarga de ir a targetUrl sin ser bloqueado
-        const proxyUrl = `http://api.scraperapi.com?api_key=${SCRAPER_API_KEY}&url=${encodeURIComponent(targetUrl)}`;
+        const proxyUrl = 'https://api.scraperapi.com';
 
         // 3. Hacemos la petición (Damos 9s de límite para no chocar con el límite de 10s de Netlify)
-        const { data } = await axios.get(proxyUrl, { timeout: 9000 });
+        const { data } = await axios.get(proxyUrl, {
+            timeout: 9000,
+            params: {
+                api_key: SCRAPER_API_KEY,
+                url: targetUrl
+            }
+        });
 
         console.log("Datos recibidos vía Proxy!");
 
@@ -52,7 +61,9 @@ exports.handler = async (event, context) => {
                 timestamp: new Date().toISOString(),
                 sources: {
                     BCV: rates.USD ? 'ok' : 'unavailable',
-                    PARALELO: rates.PARALELO ? 'ok' : 'unavailable'
+                    PARALELO: rates.PARALELO ? 'ok' : 'unavailable',
+                    DOLARTODAY: rates.DOLARTODAY ? 'ok' : 'unavailable',
+                    BINANCE: rates.BINANCE ? 'ok' : 'unavailable'
                 }
             })
         };
