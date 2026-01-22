@@ -3,6 +3,8 @@ const axios = require('axios');
 // ==========================================
 // 📍 Configura tu API KEY de ScraperAPI en Netlify
 // ==========================================
+
+=======
 const SCRAPER_API_KEY = '8ba7cc9eac524888e642e09924e929be';
 
 
