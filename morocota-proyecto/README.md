@@ -22,6 +22,13 @@ git push -u origin main
 2. Selecciona tu repositorio
 3. Click "Deploy"
 
+### 3. Configura la API de ScraperAPI
+En Netlify: **Site settings → Environment variables** añade:
+
+```
+SCRAPER_API_KEY=tu_api_key
+```
+
 ## 📁 Estructura
 ```
 morocota-netlify-v3/
