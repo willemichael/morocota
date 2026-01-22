@@ -1,30 +1,11 @@
 const axios = require('axios');
 
 // ==========================================
-// 🔑 CONFIGURACIÓN
+// 📍 AQUÍ VA TU API KEY DE SCRAPERAPI
 // ==========================================
 const SCRAPER_API_KEY = '8ba7cc9eac524888e642e09924e929be'; 
-// ↑↑↑ ¡PEGA TU CLAVE DE SCRAPERAPI ARRIBA! ↑↑↑
+// ↑ Ejemplo: 'a1b2c3d4e5...' (Consérvala entre las comillas)
 
-// Cache para ahorrar créditos (10 minutos)
-let cache = {
-    data: null,
-    timestamp: 0
-};
-const CACHE_DURATION = 10 * 60 * 1000; 
-
-// Función auxiliar para usar el Proxy
-async function fetchWithProxy(targetUrl) {
-    try {
-        // Construimos la URL puente
-        const proxyUrl = `http://api.scraperapi.com?api_key=${SCRAPER_API_KEY}&url=${encodeURIComponent(targetUrl)}`;
-        const response = await axios.get(proxyUrl, { timeout: 20000 }); // Damos 20s de tiempo
-        return response.data;
-    } catch (error) {
-        console.error(`Error proxy en ${targetUrl}:`, error.message);
-        return null;
-    }
-}
 
 exports.handler = async (event, context) => {
     const headers = {
@@ -34,68 +15,57 @@ exports.handler = async (event, context) => {
     };
 
     try {
-        // 1. Revisar caché (para no gastar tus créditos de ScraperAPI rápido)
-        const now = Date.now();
-        if (cache.data && (now - cache.timestamp) < CACHE_DURATION) {
-            console.log("Usando Caché (Ahorrando créditos)");
-            return {
-                statusCode: 200,
-                headers,
-                body: JSON.stringify({ ...cache.data, cached: true })
-            };
-        }
+        console.log("Iniciando consulta vía ScraperAPI...");
 
-        console.log("Cache expirado. Buscando datos frescos con Proxy...");
+        // 1. Preparamos la URL de destino (PyDolarVe con todos los monitores)
+        const targetUrl = 'https://pydolarve.org/api/v1/dollar?monitor=bcv,enparalelovzla,dolartoday,binance';
+        
+        // 2. Construimos la URL Puente (La petición pasa por ScraperAPI)
+        // ScraperAPI se encarga de ir a targetUrl sin ser bloqueado
+        const proxyUrl = `http://api.scraperapi.com?api_key=${SCRAPER_API_KEY}&url=${encodeURIComponent(targetUrl)}`;
 
-        // 2. Obtener datos (Usamos PyDolarVe que tiene todo junto)
-        // Pedimos monitor "bcv", "enparalelovzla", etc.
-        const dataBCV = await fetchWithProxy('https://pydolarve.org/api/v1/dollar?page=bcv');
-        const dataParalelo = await fetchWithProxy('https://pydolarve.org/api/v1/dollar?page=enparalelovzla');
-        const dataCripto = await fetchWithProxy('https://pydolarve.org/api/v1/dollar?page=binance');
-        const dataDT = await fetchWithProxy('https://pydolarve.org/api/v1/dollar?page=dolartoday');
+        // 3. Hacemos la petición (Damos 9s de límite para no chocar con el límite de 10s de Netlify)
+        const { data } = await axios.get(proxyUrl, { timeout: 9000 });
 
-        // 3. Organizar la respuesta
-        // Si alguna falla, ponemos null o 0 para que no rompa la web
+        console.log("Datos recibidos vía Proxy!");
+
+        // 4. Organizamos los datos
         const rates = {
-            USD: dataBCV?.monitors?.bcv?.price || null,
-            EUR: dataBCV?.monitors?.bcv?.price_eur || null,
-            PROMEDIO: 0, 
-            PARALELO: dataParalelo?.monitors?.enparalelovzla?.price || null,
-            DOLARTODAY: dataDT?.monitors?.dolartoday?.price || null,
-            BINANCE: dataCripto?.monitors?.binance?.price || null
+            USD: data.bcv?.price || null,
+            EUR: data.bcv?.price_eur || null,
+            PROMEDIO: 0,
+            PARALELO: data.enparalelovzla?.price || null,
+            DOLARTODAY: data.dolartoday?.price || null,
+            BINANCE: data.binance?.price || null
         };
 
-        // Calcular promedio si tenemos datos
+        // Calcular promedio
         if (rates.USD && rates.EUR) {
             rates.PROMEDIO = parseFloat(((rates.USD + rates.EUR) / 2).toFixed(2));
-        }
-
-        const response = {
-            rates,
-            timestamp: new Date().toISOString(),
-            sources: {
-                BCV: rates.USD ? 'ok' : 'error',
-                PARALELO: rates.PARALELO ? 'ok' : 'error'
-            }
-        };
-
-        // Actualizar caché solo si obtuvimos al menos el BCV
-        if (rates.USD) {
-            cache = { data: response, timestamp: now };
         }
 
         return {
             statusCode: 200,
             headers,
-            body: JSON.stringify(response)
+            body: JSON.stringify({
+                rates: rates,
+                timestamp: new Date().toISOString(),
+                sources: {
+                    BCV: rates.USD ? 'ok' : 'unavailable',
+                    PARALELO: rates.PARALELO ? 'ok' : 'unavailable'
+                }
+            })
         };
 
     } catch (error) {
-        console.error('Error General:', error);
+        console.error('Error con ScraperAPI:', error.message);
         return {
             statusCode: 500,
             headers,
-            body: JSON.stringify({ error: "Error interno", details: error.message })
+            body: JSON.stringify({ 
+                error: "Error de conexión proxy", 
+                details: error.message 
+            })
         };
     }
 };
