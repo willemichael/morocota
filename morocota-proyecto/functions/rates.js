@@ -1,166 +1,88 @@
 const axios = require('axios');
 
-// Cache en memoria
+// ==========================================
+// 🔑 CONFIGURACIÓN
+// ==========================================
+const SCRAPER_API_KEY = '8ba7cc9eac524888e642e09924e929be'; 
+// ↑↑↑ ¡PEGA TU CLAVE DE SCRAPERAPI ARRIBA! ↑↑↑
+
+// Cache para ahorrar créditos (10 minutos)
 let cache = {
     data: null,
     timestamp: 0
 };
-const CACHE_DURATION = 5 * 60 * 1000; // 5 minutos
+const CACHE_DURATION = 10 * 60 * 1000; 
 
-// ============== OBTENER DATOS REALES ==============
-
-async function getBCV() {
-    // DATOS DE PRUEBA (MOCK)
-    // Esto simula que el BCV respondió correctamente
-    console.log("Usando datos de prueba...");
-    return {
-        USD: 36.50,    // Precio fijo de prueba
-        EUR: 39.20,
-        lastUpdate: "Prueba Manual"
-    };
-}
-
-async function getParalelo() {
+// Función auxiliar para usar el Proxy
+async function fetchWithProxy(targetUrl) {
     try {
-        const { data } = await axios.get('https://pydolarve.org/api/v1/dollar?page=enparalelovzla', {
-            timeout: 8000
-        });
-        
-        if (data?.monitors?.enparalelovzla?.price) {
-            return {
-                price: data.monitors.enparalelovzla.price,
-                lastUpdate: data.monitors.enparalelovzla.last_update || null
-            };
-        }
-        throw new Error('Paralelo data not available');
+        // Construimos la URL puente
+        const proxyUrl = `http://api.scraperapi.com?api_key=${SCRAPER_API_KEY}&url=${encodeURIComponent(targetUrl)}`;
+        const response = await axios.get(proxyUrl, { timeout: 20000 }); // Damos 20s de tiempo
+        return response.data;
     } catch (error) {
-        console.error('Error Paralelo:', error.message);
-        return { price: null, lastUpdate: null };
+        console.error(`Error proxy en ${targetUrl}:`, error.message);
+        return null;
     }
 }
-
-async function getDolarToday() {
-    try {
-        const { data } = await axios.get('https://s3.amazonaws.com/dolartoday/data.json', {
-            timeout: 8000
-        });
-        
-        const price = data?.USD?.dolartoday || data?.USD?.promedio;
-        if (price) {
-            return {
-                price: price,
-                lastUpdate: data?._timestamp?.fecha || null
-            };
-        }
-        throw new Error('DolarToday data not available');
-    } catch (error) {
-        console.error('Error DolarToday:', error.message);
-        return { price: null, lastUpdate: null };
-    }
-}
-
-async function getBinance() {
-    try {
-        const { data } = await axios.get('https://pydolarve.org/api/v1/dollar?page=binance', {
-            timeout: 8000
-        });
-        
-        if (data?.monitors?.binance?.price) {
-            return {
-                price: data.monitors.binance.price,
-                lastUpdate: data.monitors.binance.last_update || null
-            };
-        }
-        throw new Error('Binance data not available');
-    } catch (error) {
-        console.error('Error Binance:', error.message);
-        return { price: null, lastUpdate: null };
-    }
-}
-
-// ============== HANDLER PRINCIPAL ==============
 
 exports.handler = async (event, context) => {
     const headers = {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Headers': 'Content-Type',
-        'Access-Control-Allow-Methods': 'GET, OPTIONS',
         'Content-Type': 'application/json'
     };
 
-    if (event.httpMethod === 'OPTIONS') {
-        return { statusCode: 200, headers, body: '' };
-    }
-
     try {
+        // 1. Revisar caché (para no gastar tus créditos de ScraperAPI rápido)
         const now = Date.now();
-
-        // Verificar cache
         if (cache.data && (now - cache.timestamp) < CACHE_DURATION) {
+            console.log("Usando Caché (Ahorrando créditos)");
             return {
                 statusCode: 200,
                 headers,
-                body: JSON.stringify({
-                    ...cache.data,
-                    cached: true,
-                    cacheAge: Math.round((now - cache.timestamp) / 1000)
-                })
+                body: JSON.stringify({ ...cache.data, cached: true })
             };
         }
 
-        // Obtener datos en paralelo
-        const [bcv, paralelo, dolartoday, binance] = await Promise.all([
-            getBCV(),
-            getParalelo(),
-            getDolarToday(),
-            getBinance()
-        ]);
+        console.log("Cache expirado. Buscando datos frescos con Proxy...");
 
-        // Solo incluir datos que realmente tenemos
+        // 2. Obtener datos (Usamos PyDolarVe que tiene todo junto)
+        // Pedimos monitor "bcv", "enparalelovzla", etc.
+        const dataBCV = await fetchWithProxy('https://pydolarve.org/api/v1/dollar?page=bcv');
+        const dataParalelo = await fetchWithProxy('https://pydolarve.org/api/v1/dollar?page=enparalelovzla');
+        const dataCripto = await fetchWithProxy('https://pydolarve.org/api/v1/dollar?page=binance');
+        const dataDT = await fetchWithProxy('https://pydolarve.org/api/v1/dollar?page=dolartoday');
+
+        // 3. Organizar la respuesta
+        // Si alguna falla, ponemos null o 0 para que no rompa la web
         const rates = {
-            USD: bcv.USD,
-            EUR: bcv.EUR,
-            PROMEDIO: (bcv.USD && bcv.EUR) ? parseFloat(((bcv.USD + bcv.EUR) / 2).toFixed(2)) : null,
-            PARALELO: paralelo.price,
-            DOLARTODAY: dolartoday.price,
-            BINANCE: binance.price
+            USD: dataBCV?.monitors?.bcv?.price || null,
+            EUR: dataBCV?.monitors?.bcv?.price_eur || null,
+            PROMEDIO: 0, 
+            PARALELO: dataParalelo?.monitors?.enparalelovzla?.price || null,
+            DOLARTODAY: dataDT?.monitors?.dolartoday?.price || null,
+            BINANCE: dataCripto?.monitors?.binance?.price || null
         };
 
-        // Verificar si tenemos al menos una fuente funcionando
-        const availableSources = Object.values(rates).filter(v => v !== null).length;
-        
-        if (availableSources === 0) {
-            return {
-                statusCode: 503,
-                headers,
-                body: JSON.stringify({
-                    error: 'No hay fuentes disponibles',
-                    message: 'No se pudo conectar con ninguna fuente de datos. Intente más tarde.',
-                    timestamp: new Date().toISOString()
-                })
-            };
+        // Calcular promedio si tenemos datos
+        if (rates.USD && rates.EUR) {
+            rates.PROMEDIO = parseFloat(((rates.USD + rates.EUR) / 2).toFixed(2));
         }
 
         const response = {
             rates,
             timestamp: new Date().toISOString(),
             sources: {
-                BCV: bcv.USD ? 'ok' : 'unavailable',
-                EUR: bcv.EUR ? 'ok' : 'unavailable',
-                PARALELO: paralelo.price ? 'ok' : 'unavailable',
-                DOLARTODAY: dolartoday.price ? 'ok' : 'unavailable',
-                BINANCE: binance.price ? 'ok' : 'unavailable'
-            },
-            lastUpdates: {
-                BCV: bcv.lastUpdate,
-                PARALELO: paralelo.lastUpdate,
-                DOLARTODAY: dolartoday.lastUpdate,
-                BINANCE: binance.lastUpdate
+                BCV: rates.USD ? 'ok' : 'error',
+                PARALELO: rates.PARALELO ? 'ok' : 'error'
             }
         };
 
-        // Guardar cache solo si hay datos
-        cache = { data: response, timestamp: now };
+        // Actualizar caché solo si obtuvimos al menos el BCV
+        if (rates.USD) {
+            cache = { data: response, timestamp: now };
+        }
 
         return {
             statusCode: 200,
@@ -169,15 +91,11 @@ exports.handler = async (event, context) => {
         };
 
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Error General:', error);
         return {
             statusCode: 500,
             headers,
-            body: JSON.stringify({
-                error: 'Error del servidor',
-                message: error.message,
-                timestamp: new Date().toISOString()
-            })
+            body: JSON.stringify({ error: "Error interno", details: error.message })
         };
     }
 };
